@@ -189,6 +189,7 @@ body {
 
 /* Note card */
 .note-card {
+  position: relative;
   width: 100%;
   height: 100%;
   border-radius: 8px;
@@ -197,36 +198,17 @@ body {
   flex-direction: column;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.2s;
-}
-
-.note-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
-
-.note-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
   cursor: grab;
-  margin-bottom: 0.5rem;
-  min-height: 1.5rem;
 }
 
-.note-card-header:active {
+.note-card:active {
   cursor: grabbing;
 }
 
-.note-card-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .note-card-actions {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
   display: flex;
   gap: 0.25rem;
   opacity: 0;
@@ -235,6 +217,16 @@ body {
 
 .note-card:hover .note-card-actions {
   opacity: 1;
+}
+
+/* Sem efeito de levantar ao arrastar */
+.react-grid-item.react-dragging {
+  transition: none !important;
+}
+
+.react-grid-item.react-dragging .note-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  cursor: grabbing;
 }
 
 .note-btn {
@@ -261,12 +253,34 @@ body {
 }
 
 .note-card-content {
-  font-size: 0.85rem;
-  line-height: 1.4;
+  font-size: 1rem;
+  line-height: 1.5;
   flex: 1;
   overflow: hidden;
-  white-space: pre-wrap;
   word-break: break-word;
+}
+
+/* Barra de formatação */
+.format-toolbar {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.format-btn {
+  padding: 0.25rem 0.7rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #444;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.format-btn:hover {
+  border-color: #667eea;
+  background: #f0f2ff;
 }
 
 /* Modal */

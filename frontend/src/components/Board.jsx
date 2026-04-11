@@ -89,8 +89,8 @@ export default function Board({ onLogout }) {
     y: note.y,
     w: note.w,
     h: note.h,
-    minW: 2,
-    minH: 2,
+    minW: 1,
+    minH: 1,
   }));
 
   if (loading) {
@@ -120,12 +120,13 @@ export default function Board({ onLogout }) {
           className="notes-grid"
           layouts={{ lg: gridLayout }}
           breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480 }}
-          cols={{ lg: 12, md: 10, sm: 6, xs: 4 }}
-          rowHeight={80}
+          cols={{ lg: 48, md: 40, sm: 24, xs: 16 }}
+          rowHeight={20}
           onLayoutChange={handleLayoutChange}
-          draggableHandle=".note-card-header"
+          draggableHandle=".note-card"
+          draggableCancel=".note-btn"
           compactType={null}
-          preventCollision={false}
+          preventCollision={true}
         >
           {notes.map((note) => (
             <div key={String(note.id)}>
