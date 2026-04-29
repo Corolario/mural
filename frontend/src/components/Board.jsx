@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
@@ -13,10 +13,6 @@ export default function Board({ onLogout }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editNote, setEditNote] = useState(null);
   const [loading, setLoading] = useState(true);
-  const notesRef = useRef([]);
-  const debounceRef = useRef(null);
-
-  notesRef.current = notes;
 
   const fetchNotes = useCallback(async () => {
     try {
@@ -33,63 +29,43 @@ export default function Board({ onLogout }) {
     fetchNotes();
   }, [fetchNotes]);
 
-  const handleLayoutChange = useCallback((layout) => {
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-    debounceRef.current = setTimeout(() => {
-      const current = notesRef.current;
-      const updates = [];
-      layout.forEach((item) => {
-        const note = current.find((n) => String(n.id) === item.i);
-        if (
-          note &&
-          (note.x !== item.x ||
-            note.y !== item.y ||
-            note.w !== item.w ||
-            note.h !== item.h)
-        ) {
-          updates.push({ id: note.id, x: item.x, y: item.y, w: item.w, h: item.h });
-        }
-      });
-      if (updates.length === 0) return;
-      setNotes((prev) =>
-        prev.map((n) => {
-          const u = updates.find((x) => x.id === n.id);
-          return u ? { ...n, x: u.x, y: u.y, w: u.w, h: u.h } : n;
-        })
-      );
-      updates.forEach((u) => {
-        api
-          .patch(`/notes/${u.id}/position`, { x: u.x, y: u.y, w: u.w, h: u.h })
-          .catch(() => {});
-      });
-    }, 300);
+  const updateNotePosition = useCallback((id, x, y, w, h) => {
+    setNotes((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, x, y, w, h } : n))
+    );
+    api.patch(`/notes/${id}/position`, { x, y, w, h }).catch(() => {});
   }, []);
 
-  const computeNextPosition = (existingNotes) => {
-    if (existingNotes.length === 0) return { x: 0, y: 0 };
-    const maxY = Math.max(...existingNotes.map((n) => n.y + n.h));
-    return { x: 0, y: maxY };
-  };
+  const handleDragStop = useCallback((_layout, _oldItem, newItem) => {
+    const id = Number(newItem.i);
+    updateNotePosition(id, newItem.x, newItem.y, newItem.w, newItem.h);
+  }, [updateNotePosition]);
+
+  const handleResizeStop = useCallback((_layout, _oldItem, newItem) => {
+    const id = Number(newItem.i);
+    updateNotePosition(id, newItem.x, newItem.y, newItem.w, newItem.h);
+  }, [updateNotePosition]);
 
   const handleSave = async (data, noteId) => {
     if (noteId) {
       const res = await api.put(`/notes/${noteId}`, data);
       setNotes((prev) => prev.map((n) => (n.id === noteId ? res.data : n)));
     } else {
-      const pos = computeNextPosition(notesRef.current);
       const res = await api.post("/notes", data);
       const created = res.data;
-      await api
-        .patch(`/notes/${created.id}/position`, {
-          x: pos.x,
-          y: pos.y,
-          w: created.w,
-          h: created.h,
-        })
-        .catch(() => {});
-      setNotes((prev) => [{ ...created, x: pos.x, y: pos.y }, ...prev]);
+      setNotes((prev) => {
+        const maxY = prev.length > 0 ? Math.max(...prev.map((n) => n.y + n.h)) : 0;
+        const positioned = { ...created, x: 0, y: maxY };
+        api
+          .patch(`/notes/${created.id}/position`, {
+            x: 0,
+            y: maxY,
+            w: created.w,
+            h: created.h,
+          })
+          .catch(() => {});
+        return [positioned, ...prev];
+      });
     }
   };
 
@@ -147,7 +123,8 @@ export default function Board({ onLogout }) {
           breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480 }}
           cols={{ lg: 12, md: 10, sm: 6, xs: 4 }}
           rowHeight={80}
-          onLayoutChange={handleLayoutChange}
+          onDragStop={handleDragStop}
+          onResizeStop={handleResizeStop}
           draggableHandle=".note-card-header"
           compactType={null}
           allowOverlap={true}
