@@ -46,9 +46,6 @@ export default function LoginPage({ onAuth }) {
         <button type="submit" disabled={loading}>
           {loading ? "Entrando..." : "Entrar"}
         </button>
-        <p className="auth-switch">
-          Contate o administrador para obter acesso.
-        </p>
       </form>
     </div>
   );

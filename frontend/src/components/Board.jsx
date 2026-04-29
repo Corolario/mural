@@ -89,8 +89,8 @@ export default function Board({ onLogout }) {
     y: note.y,
     w: note.w,
     h: note.h,
-    minW: 2,
-    minH: 2,
+    minW: 1,
+    minH: 1,
   }));
 
   if (loading) {
@@ -125,7 +125,8 @@ export default function Board({ onLogout }) {
           onLayoutChange={handleLayoutChange}
           draggableHandle=".note-card-header"
           compactType={null}
-          preventCollision={false}
+          preventCollision={true}
+          allowOverlap={true}
         >
           {notes.map((note) => (
             <div key={String(note.id)}>
