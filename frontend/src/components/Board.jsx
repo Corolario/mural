@@ -13,7 +13,10 @@ export default function Board({ onLogout }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editNote, setEditNote] = useState(null);
   const [loading, setLoading] = useState(true);
-  const layoutChangeRef = useRef(null);
+  const notesRef = useRef([]);
+  const debounceRef = useRef(null);
+
+  notesRef.current = notes;
 
   const fetchNotes = useCallback(async () => {
     try {
@@ -30,41 +33,63 @@ export default function Board({ onLogout }) {
     fetchNotes();
   }, [fetchNotes]);
 
-  const handleLayoutChange = useCallback(
-    (layout) => {
-      if (layoutChangeRef.current) {
-        clearTimeout(layoutChangeRef.current);
-      }
-      layoutChangeRef.current = setTimeout(() => {
-        layout.forEach((item) => {
-          const note = notes.find((n) => String(n.id) === item.i);
-          if (note && (note.x !== item.x || note.y !== item.y || note.w !== item.w || note.h !== item.h)) {
-            api
-              .patch(`/notes/${note.id}/position`, {
-                x: item.x,
-                y: item.y,
-                w: item.w,
-                h: item.h,
-              })
-              .catch(() => {});
-            note.x = item.x;
-            note.y = item.y;
-            note.w = item.w;
-            note.h = item.h;
-          }
-        });
-      }, 300);
-    },
-    [notes]
-  );
+  const handleLayoutChange = useCallback((layout) => {
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = setTimeout(() => {
+      const current = notesRef.current;
+      const updates = [];
+      layout.forEach((item) => {
+        const note = current.find((n) => String(n.id) === item.i);
+        if (
+          note &&
+          (note.x !== item.x ||
+            note.y !== item.y ||
+            note.w !== item.w ||
+            note.h !== item.h)
+        ) {
+          updates.push({ id: note.id, x: item.x, y: item.y, w: item.w, h: item.h });
+        }
+      });
+      if (updates.length === 0) return;
+      setNotes((prev) =>
+        prev.map((n) => {
+          const u = updates.find((x) => x.id === n.id);
+          return u ? { ...n, x: u.x, y: u.y, w: u.w, h: u.h } : n;
+        })
+      );
+      updates.forEach((u) => {
+        api
+          .patch(`/notes/${u.id}/position`, { x: u.x, y: u.y, w: u.w, h: u.h })
+          .catch(() => {});
+      });
+    }, 300);
+  }, []);
+
+  const computeNextPosition = (existingNotes) => {
+    if (existingNotes.length === 0) return { x: 0, y: 0 };
+    const maxY = Math.max(...existingNotes.map((n) => n.y + n.h));
+    return { x: 0, y: maxY };
+  };
 
   const handleSave = async (data, noteId) => {
     if (noteId) {
       const res = await api.put(`/notes/${noteId}`, data);
       setNotes((prev) => prev.map((n) => (n.id === noteId ? res.data : n)));
     } else {
+      const pos = computeNextPosition(notesRef.current);
       const res = await api.post("/notes", data);
-      setNotes((prev) => [res.data, ...prev]);
+      const created = res.data;
+      await api
+        .patch(`/notes/${created.id}/position`, {
+          x: pos.x,
+          y: pos.y,
+          w: created.w,
+          h: created.h,
+        })
+        .catch(() => {});
+      setNotes((prev) => [{ ...created, x: pos.x, y: pos.y }, ...prev]);
     }
   };
 
@@ -125,7 +150,6 @@ export default function Board({ onLogout }) {
           onLayoutChange={handleLayoutChange}
           draggableHandle=".note-card-header"
           compactType={null}
-          preventCollision={true}
           allowOverlap={true}
         >
           {notes.map((note) => (
