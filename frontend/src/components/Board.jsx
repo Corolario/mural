@@ -126,12 +126,13 @@ export default function Board({ onLogout }) {
           layout={gridLayout}
           cols={12}
           rowHeight={80}
+          containerPadding={[16, 16]}
           onDragStop={handleDragStop}
           onResizeStop={handleResizeStop}
           draggableHandle=".note-card-header"
+          draggableCancel=".note-card-actions"
           compactType={null}
           allowOverlap={true}
-          useCSSTransforms={true}
         >
           {notes.map((note) => (
             <div key={String(note.id)}>

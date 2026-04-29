@@ -183,7 +183,6 @@ body {
 
 /* Notes grid */
 .notes-grid {
-  padding: 1rem;
   min-height: calc(100vh - 70px);
 }
 
