@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
-import { Responsive, WidthProvider } from "react-grid-layout";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import GridLayout, { WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import api from "../api.js";
 import NoteCard from "./NoteCard.jsx";
 import NoteModal from "./NoteModal.jsx";
 
-const ResponsiveGridLayout = WidthProvider(Responsive);
+const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 export default function Board({ onLogout }) {
   const [notes, setNotes] = useState([]);
@@ -84,15 +84,19 @@ export default function Board({ onLogout }) {
     setModalOpen(true);
   };
 
-  const gridLayout = notes.map((note) => ({
-    i: String(note.id),
-    x: note.x,
-    y: note.y,
-    w: note.w,
-    h: note.h,
-    minW: 1,
-    minH: 1,
-  }));
+  const gridLayout = useMemo(
+    () =>
+      notes.map((note) => ({
+        i: String(note.id),
+        x: note.x,
+        y: note.y,
+        w: note.w,
+        h: note.h,
+        minW: 1,
+        minH: 1,
+      })),
+    [notes]
+  );
 
   if (loading) {
     return <div className="loading">Carregando...</div>;
@@ -119,15 +123,15 @@ export default function Board({ onLogout }) {
       ) : (
         <ResponsiveGridLayout
           className="notes-grid"
-          layouts={{ lg: gridLayout }}
-          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480 }}
-          cols={{ lg: 12, md: 10, sm: 6, xs: 4 }}
+          layout={gridLayout}
+          cols={12}
           rowHeight={80}
           onDragStop={handleDragStop}
           onResizeStop={handleResizeStop}
           draggableHandle=".note-card-header"
           compactType={null}
           allowOverlap={true}
+          useCSSTransforms={true}
         >
           {notes.map((note) => (
             <div key={String(note.id)}>
