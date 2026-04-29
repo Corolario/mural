@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../api.js";
 
-export default function LoginPage({ onAuth, onSwitch }) {
+export default function LoginPage({ onAuth }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -47,10 +47,7 @@ export default function LoginPage({ onAuth, onSwitch }) {
           {loading ? "Entrando..." : "Entrar"}
         </button>
         <p className="auth-switch">
-          Não tem conta?{" "}
-          <button type="button" onClick={onSwitch}>
-            Criar conta
-          </button>
+          Contate o administrador para obter acesso.
         </p>
       </form>
     </div>
