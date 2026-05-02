@@ -90,22 +90,6 @@ body {
   text-align: center;
 }
 
-.auth-switch {
-  text-align: center;
-  margin-top: 1rem;
-  color: #777;
-  font-size: 0.9rem;
-}
-
-.auth-switch button {
-  background: none;
-  border: none;
-  color: #667eea;
-  cursor: pointer;
-  font-size: 0.9rem;
-  text-decoration: underline;
-}
-
 /* Board */
 .board {
   min-height: 100vh;
@@ -393,15 +377,4 @@ body {
 
 .react-grid-item {
   transition: none !important;
-}
-
-.react-grid-item.react-draggable-dragging,
-.react-grid-item.resizing {
-  z-index: 3;
-}
-
-.react-grid-item.react-draggable-dragging .note-card,
-.react-grid-item.resizing .note-card {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: none;
 }
