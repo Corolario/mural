@@ -25,8 +25,8 @@ class Note(Base):
     color = Column(String(20), nullable=False, default="yellow")
     x = Column(Integer, nullable=False, default=0)
     y = Column(Integer, nullable=False, default=0)
-    w = Column(Integer, nullable=False, default=3)
-    h = Column(Integer, nullable=False, default=2)
+    w = Column(Integer, nullable=False, default=12)
+    h = Column(Integer, nullable=False, default=8)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const COLORS = ["yellow", "pink", "blue", "green", "purple"];
 
@@ -19,28 +19,42 @@ const COLOR_PREVIEW = {
 };
 
 export default function NoteModal({ note, onSave, onClose }) {
-  const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [color, setColor] = useState("yellow");
   const [loading, setLoading] = useState(false);
+  const textareaRef = useRef(null);
 
   useEffect(() => {
     if (note) {
-      setTitle(note.title);
       setContent(note.content);
       setColor(note.color);
     } else {
-      setTitle("");
       setContent("");
       setColor("yellow");
     }
   }, [note]);
 
+  function applyFormat(marker) {
+    const el = textareaRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = content.slice(start, end);
+    const newContent =
+      content.slice(0, start) + marker + selected + marker + content.slice(end);
+    setContent(newContent);
+    // Reposiciona o cursor após o marcador final
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(start + marker.length, end + marker.length);
+    }, 0);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await onSave({ title, content, color }, note?.id);
+      await onSave({ title: "", content, color }, note?.id);
       onClose();
     } catch {
       setLoading(false);
@@ -55,14 +69,16 @@ export default function NoteModal({ note, onSave, onClose }) {
         onSubmit={handleSubmit}
       >
         <h2>{note ? "Editar Recado" : "Novo Recado"}</h2>
-        <input
-          type="text"
-          placeholder="Título"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          maxLength={200}
-        />
+        <div className="format-toolbar">
+          <button type="button" className="format-btn format-btn-bold" onClick={() => applyFormat("**")} title="Negrito">
+            <b>N</b>
+          </button>
+          <button type="button" className="format-btn format-btn-underline" onClick={() => applyFormat("__")} title="Sublinhado">
+            <u>S</u>
+          </button>
+        </div>
         <textarea
+          ref={textareaRef}
           placeholder="Conteúdo do recado..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
