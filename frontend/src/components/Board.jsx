@@ -1,19 +1,18 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { Responsive, WidthProvider } from "react-grid-layout";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import GridLayout, { WidthProvider } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import api from "../api.js";
 import NoteCard from "./NoteCard.jsx";
 import NoteModal from "./NoteModal.jsx";
 
-const ResponsiveGridLayout = WidthProvider(Responsive);
+const ResponsiveGridLayout = WidthProvider(GridLayout);
 
 export default function Board({ onLogout }) {
   const [notes, setNotes] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editNote, setEditNote] = useState(null);
   const [loading, setLoading] = useState(true);
-  const layoutChangeRef = useRef(null);
 
   const fetchNotes = useCallback(async () => {
     try {
@@ -30,33 +29,22 @@ export default function Board({ onLogout }) {
     fetchNotes();
   }, [fetchNotes]);
 
-  const handleLayoutChange = useCallback(
-    (layout) => {
-      if (layoutChangeRef.current) {
-        clearTimeout(layoutChangeRef.current);
-      }
-      layoutChangeRef.current = setTimeout(() => {
-        layout.forEach((item) => {
-          const note = notes.find((n) => String(n.id) === item.i);
-          if (note && (note.x !== item.x || note.y !== item.y || note.w !== item.w || note.h !== item.h)) {
-            api
-              .patch(`/notes/${note.id}/position`, {
-                x: item.x,
-                y: item.y,
-                w: item.w,
-                h: item.h,
-              })
-              .catch(() => {});
-            note.x = item.x;
-            note.y = item.y;
-            note.w = item.w;
-            note.h = item.h;
-          }
-        });
-      }, 300);
-    },
-    [notes]
-  );
+  const updateNotePosition = useCallback((id, x, y, w, h) => {
+    setNotes((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, x, y, w, h } : n))
+    );
+    api.patch(`/notes/${id}/position`, { x, y, w, h }).catch(() => {});
+  }, []);
+
+  const handleDragStop = useCallback((_layout, _oldItem, newItem) => {
+    const id = Number(newItem.i);
+    updateNotePosition(id, newItem.x, newItem.y, newItem.w, newItem.h);
+  }, [updateNotePosition]);
+
+  const handleResizeStop = useCallback((_layout, _oldItem, newItem) => {
+    const id = Number(newItem.i);
+    updateNotePosition(id, newItem.x, newItem.y, newItem.w, newItem.h);
+  }, [updateNotePosition]);
 
   const handleSave = async (data, noteId) => {
     if (noteId) {
@@ -64,7 +52,20 @@ export default function Board({ onLogout }) {
       setNotes((prev) => prev.map((n) => (n.id === noteId ? res.data : n)));
     } else {
       const res = await api.post("/notes", data);
-      setNotes((prev) => [res.data, ...prev]);
+      const created = res.data;
+      setNotes((prev) => {
+        const maxY = prev.length > 0 ? Math.max(...prev.map((n) => n.y + n.h)) : 0;
+        const positioned = { ...created, x: 0, y: maxY };
+        api
+          .patch(`/notes/${created.id}/position`, {
+            x: 0,
+            y: maxY,
+            w: created.w,
+            h: created.h,
+          })
+          .catch(() => {});
+        return [positioned, ...prev];
+      });
     }
   };
 
@@ -83,15 +84,19 @@ export default function Board({ onLogout }) {
     setModalOpen(true);
   };
 
-  const gridLayout = notes.map((note) => ({
-    i: String(note.id),
-    x: note.x,
-    y: note.y,
-    w: note.w,
-    h: note.h,
-    minW: 1,
-    minH: 1,
-  }));
+  const gridLayout = useMemo(
+    () =>
+      notes.map((note) => ({
+        i: String(note.id),
+        x: note.x,
+        y: note.y,
+        w: note.w,
+        h: note.h,
+        minW: 1,
+        minH: 1,
+      })),
+    [notes]
+  );
 
   if (loading) {
     return <div className="loading">Carregando...</div>;
@@ -118,15 +123,16 @@ export default function Board({ onLogout }) {
       ) : (
         <ResponsiveGridLayout
           className="notes-grid"
-          layouts={{ lg: gridLayout }}
-          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480 }}
-          cols={{ lg: 48, md: 40, sm: 24, xs: 16 }}
-          rowHeight={20}
-          onLayoutChange={handleLayoutChange}
-          draggableHandle=".note-card"
-          draggableCancel=".note-btn"
+          layout={gridLayout}
+          cols={12}
+          rowHeight={80}
+          containerPadding={[16, 16]}
+          onDragStop={handleDragStop}
+          onResizeStop={handleResizeStop}
+          draggableHandle=".note-card-header"
+          draggableCancel=".note-card-actions"
           compactType={null}
-          preventCollision={true}
+          allowOverlap={true}
         >
           {notes.map((note) => (
             <div key={String(note.id)}>

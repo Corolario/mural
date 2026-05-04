@@ -4,7 +4,7 @@ Aplicação full-stack de mural de recados (sticky notes) com cards arrastáveis
 
 ## Funcionalidades
 
-- **Autenticação JWT** — Registro e login com tokens seguros (PyJWT + bcrypt)
+- **Autenticação JWT** — Login com tokens seguros (PyJWT + bcrypt). Usuários gerenciados via CLI
 - **CRUD de recados** — Criar, editar e excluir recados com título, conteúdo e cor
 - **Drag & drop** — Cards arrastáveis e redimensionáveis com React Grid Layout
 - **Posições persistentes** — Posição e tamanho dos cards salvos no banco de dados
@@ -98,11 +98,19 @@ Isso irá:
 - Expor o frontend em `http://localhost:3000`
 - Expor a API em `http://localhost:8000`
 
-### 4. Acessar a aplicação
+### 4. Criar o primeiro usuário
 
-Abra `http://localhost:3000` no navegador.
+O registro pela web está desabilitado. Os usuários são gerenciados via CLI dentro do container backend:
 
-### 5. Comandos úteis
+```bash
+docker compose exec backend python manage_users.py create admin minhasenha
+```
+
+### 5. Acessar a aplicação
+
+Abra `http://localhost:3000` no navegador e faça login com o usuário criado.
+
+### 6. Comandos úteis
 
 ```bash
 # Ver logs dos containers
@@ -118,6 +126,49 @@ docker compose up --build -d
 docker compose ps
 ```
 
+## Gerenciamento de Usuários
+
+O registro pela interface web foi removido. Todos os usuários são gerenciados via script CLI executado dentro do container backend.
+
+### Criar usuário
+
+```bash
+docker compose exec backend python manage_users.py create <usuario> <senha>
+```
+
+Exemplo:
+```bash
+docker compose exec backend python manage_users.py create joao senha123
+```
+
+### Listar usuários
+
+```bash
+docker compose exec backend python manage_users.py list
+```
+
+Saída:
+```
+ID     Usuário              Criado em
+--------------------------------------------------
+1      admin                2026-04-29 10:15
+2      joao                 2026-04-29 11:30
+```
+
+### Alterar senha
+
+```bash
+docker compose exec backend python manage_users.py passwd <usuario> <nova_senha>
+```
+
+### Remover usuário
+
+Remove o usuário e **todos os recados** associados (via cascade no banco):
+
+```bash
+docker compose exec backend python manage_users.py delete <usuario>
+```
+
 ## Deploy em produção
 
 Para ambiente de produção, ajuste:
@@ -131,7 +182,6 @@ Para ambiente de produção, ajuste:
 
 | Método | Rota | Descrição |
 |---|---|---|
-| POST | `/api/auth/register` | Criar conta |
 | POST | `/api/auth/login` | Login |
 | GET | `/api/notes` | Listar recados |
 | POST | `/api/notes` | Criar recado |
@@ -139,6 +189,8 @@ Para ambiente de produção, ajuste:
 | PATCH | `/api/notes/:id/position` | Atualizar posição/tamanho |
 | DELETE | `/api/notes/:id` | Excluir recado |
 | GET | `/api/health` | Health check |
+
+> O endpoint de registro foi removido. Use `manage_users.py` para criar usuários.
 
 ## Algoritmo de Desvanecimento de Cor
 

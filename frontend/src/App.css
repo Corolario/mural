@@ -90,22 +90,6 @@ body {
   text-align: center;
 }
 
-.auth-switch {
-  text-align: center;
-  margin-top: 1rem;
-  color: #777;
-  font-size: 0.9rem;
-}
-
-.auth-switch button {
-  background: none;
-  border: none;
-  color: #667eea;
-  cursor: pointer;
-  font-size: 0.9rem;
-  text-decoration: underline;
-}
-
 /* Board */
 .board {
   min-height: 100vh;
@@ -183,7 +167,6 @@ body {
 
 /* Notes grid */
 .notes-grid {
-  padding: 1rem;
   min-height: calc(100vh - 70px);
 }
 
@@ -404,4 +387,8 @@ body {
   background: #667eea !important;
   opacity: 0.15;
   border-radius: 8px;
+}
+
+.react-grid-item {
+  transition: none !important;
 }
