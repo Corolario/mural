@@ -6,8 +6,8 @@ import api from "../api.js";
 import NoteCard from "./NoteCard.jsx";
 import NoteModal from "./NoteModal.jsx";
 
-const GRID_COLS = 24;
-const GRID_WIDTH = 720;
+const GRID_COLS = 64;
+const GRID_WIDTH = 1920;
 const ROW_HEIGHT = 30;
 
 export default function Board({ onLogout }) {

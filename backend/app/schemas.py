@@ -27,9 +27,9 @@ class NoteUpdate(BaseModel):
 
 
 class NotePositionUpdate(BaseModel):
-    x: int = Field(..., ge=0, le=23)
+    x: int = Field(..., ge=0, le=63)
     y: int = Field(..., ge=0, le=1000)
-    w: int = Field(..., ge=1, le=24)
+    w: int = Field(..., ge=1, le=64)
     h: int = Field(..., ge=1, le=60)
 
 
