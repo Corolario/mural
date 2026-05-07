@@ -20,7 +20,6 @@ class Note(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    title = Column(String(200), nullable=False, default="")
     content = Column(Text, nullable=False, default="")
     color = Column(String(20), nullable=False, default="yellow")
     x = Column(Integer, nullable=False, default=0)

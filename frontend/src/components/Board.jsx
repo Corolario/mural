@@ -129,7 +129,6 @@ export default function Board({ onLogout }) {
           containerPadding={[16, 16]}
           onDragStop={handleDragStop}
           onResizeStop={handleResizeStop}
-          draggableHandle=".note-card-header"
           draggableCancel=".note-card-actions"
           compactType={null}
           allowOverlap={true}
