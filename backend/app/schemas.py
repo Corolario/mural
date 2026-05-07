@@ -30,7 +30,7 @@ class NotePositionUpdate(BaseModel):
     x: int = Field(..., ge=0, le=23)
     y: int = Field(..., ge=0, le=1000)
     w: int = Field(..., ge=1, le=24)
-    h: int = Field(..., ge=1, le=20)
+    h: int = Field(..., ge=1, le=60)
 
 
 class NoteResponse(BaseModel):

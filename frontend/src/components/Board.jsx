@@ -7,7 +7,8 @@ import NoteCard from "./NoteCard.jsx";
 import NoteModal from "./NoteModal.jsx";
 
 const GRID_COLS = 24;
-const GRID_WIDTH = 1440;
+const GRID_WIDTH = 720;
+const ROW_HEIGHT = 30;
 
 export default function Board({ onLogout }) {
   const [notes, setNotes] = useState([]);
@@ -126,7 +127,7 @@ export default function Board({ onLogout }) {
           className="notes-grid"
           layout={gridLayout}
           cols={GRID_COLS}
-          rowHeight={80}
+          rowHeight={ROW_HEIGHT}
           width={GRID_WIDTH}
           containerPadding={[16, 16]}
           onDragStop={handleDragStop}
