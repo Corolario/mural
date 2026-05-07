@@ -124,7 +124,7 @@ export default function Board({ onLogout }) {
         <ResponsiveGridLayout
           className="notes-grid"
           layout={gridLayout}
-          cols={12}
+          cols={24}
           rowHeight={80}
           containerPadding={[16, 16]}
           onDragStop={handleDragStop}
