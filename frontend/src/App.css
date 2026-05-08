@@ -93,6 +93,29 @@ body {
 /* Board */
 .board {
   min-height: 100vh;
+}
+
+.board-body {
+  display: flex;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.filters-sidebar {
+  width: 460px;
+  flex-shrink: 0;
+  padding: 1.25rem 1rem;
+  background: white;
+  border-right: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.notes-area {
+  flex: 1;
+  min-width: 0;
   overflow-x: auto;
 }
 
@@ -106,6 +129,68 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
+}
+
+/* Filters table */
+.filters-title {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  color: #222;
+}
+
+.filters-title-tag {
+  font-weight: 400;
+}
+
+.filters-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: white;
+}
+
+.filters-table th,
+.filters-table td {
+  border: 1px solid #000;
+  padding: 4px 6px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.filters-table thead th {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+.filters-table .filters-section th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+.filters-table .filter-code {
+  font-weight: 500;
+  background: #fafafa;
+}
+
+.filters-table input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  text-align: center;
+  color: inherit;
+}
+
+.filters-table input:focus {
+  outline: 1px solid #667eea;
+  background: #f0f2ff;
+}
+
+.filters-table input[type="date"] {
+  min-width: 0;
 }
 
 .board-header h1 {

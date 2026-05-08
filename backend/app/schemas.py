@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from pydantic import BaseModel, Field
 
 
@@ -42,6 +42,27 @@ class NoteResponse(BaseModel):
     w: int
     h: int
     created_at: datetime
+    updated_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+# --- Pressure Filters ---
+
+class PressureFilterUpdate(BaseModel):
+    lavado_data: date | None = None
+    lavado_grupo: str | None = Field(None, max_length=100)
+    operando_data: date | None = None
+    operando_grupo: str | None = Field(None, max_length=100)
+
+
+class PressureFilterResponse(BaseModel):
+    id: int
+    filter_code: str
+    lavado_data: date | None
+    lavado_grupo: str | None
+    operando_data: date | None
+    operando_grupo: str | None
     updated_at: datetime
 
     model_config = {"from_attributes": True}
