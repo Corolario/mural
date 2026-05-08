@@ -5,7 +5,7 @@ Aplicação full-stack de mural de recados (sticky notes) com cards arrastáveis
 ## Funcionalidades
 
 - **Autenticação JWT** — Login com tokens seguros (PyJWT + bcrypt). Usuários gerenciados via CLI
-- **CRUD de recados** — Criar, editar e excluir recados com título, conteúdo e cor
+- **CRUD de recados** — Criar, editar e excluir recados com conteúdo e cor
 - **Drag & drop** — Cards arrastáveis e redimensionáveis com React Grid Layout
 - **Posições persistentes** — Posição e tamanho dos cards salvos no banco de dados
 - **Cores que desbotam** — Cards recentes têm cores vibrantes; a cada dia a cor desvanece, atingindo o tom mais fraco após 8 dias
@@ -37,18 +37,17 @@ mural/
 │       ├── schemas.py       # Schemas Pydantic (validação)
 │       ├── auth.py          # JWT + hash de senha
 │       └── routes/
-│           ├── auth.py      # POST /api/auth/register, /api/auth/login
+│           ├── auth.py      # POST /api/auth/login
 │           └── notes.py     # CRUD + PATCH posição
 └── frontend/
     ├── Dockerfile
     ├── nginx.conf
     ├── package.json
     └── src/
-        ├── App.jsx          # Roteamento (login/registro/board)
+        ├── App.jsx          # Login + board
         ├── api.js           # Axios com interceptor JWT
         └── components/
             ├── LoginPage.jsx
-            ├── RegisterPage.jsx
             ├── Board.jsx    # Grid layout com drag/resize
             ├── NoteCard.jsx # Card com cor que desvanece
             └── NoteModal.jsx
@@ -190,7 +189,7 @@ Para ambiente de produção, ajuste:
 | DELETE | `/api/notes/:id` | Excluir recado |
 | GET | `/api/health` | Health check |
 
-> O endpoint de registro foi removido. Use `manage_users.py` para criar usuários.
+> Não há endpoint público de registro. Use `manage_users.py` para criar usuários.
 
 ## Algoritmo de Desvanecimento de Cor
 

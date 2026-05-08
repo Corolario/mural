@@ -25,7 +25,6 @@ def list_notes(user: User = Depends(get_current_user), db: Session = Depends(get
 def create_note(data: NoteCreate, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     note = Note(
         user_id=user.id,
-        title=data.title,
         content=data.content,
         color=data.color,
     )
@@ -38,7 +37,6 @@ def create_note(data: NoteCreate, user: User = Depends(get_current_user), db: Se
 @router.put("/{note_id}", response_model=NoteResponse)
 def update_note(note_id: int, data: NoteUpdate, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     note = _get_user_note(note_id, user, db)
-    note.title = data.title
     note.content = data.content
     note.color = data.color
     db.commit()

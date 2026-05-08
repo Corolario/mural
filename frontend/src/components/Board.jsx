@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import GridLayout, { WidthProvider } from "react-grid-layout";
+import GridLayout from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import api from "../api.js";
 import NoteCard from "./NoteCard.jsx";
 import NoteModal from "./NoteModal.jsx";
 
-const ResponsiveGridLayout = WidthProvider(GridLayout);
+const GRID_COLS = 64;
+const GRID_WIDTH = 1920;
+const ROW_HEIGHT = 30;
 
 export default function Board({ onLogout }) {
   const [notes, setNotes] = useState([]);
@@ -121,15 +123,15 @@ export default function Board({ onLogout }) {
           <p>Nenhum recado ainda. Clique em &quot;+ Novo Recado&quot; para começar!</p>
         </div>
       ) : (
-        <ResponsiveGridLayout
+        <GridLayout
           className="notes-grid"
           layout={gridLayout}
-          cols={12}
-          rowHeight={80}
+          cols={GRID_COLS}
+          rowHeight={ROW_HEIGHT}
+          width={GRID_WIDTH}
           containerPadding={[16, 16]}
           onDragStop={handleDragStop}
           onResizeStop={handleResizeStop}
-          draggableHandle=".note-card-header"
           draggableCancel=".note-card-actions"
           compactType={null}
           allowOverlap={true}
@@ -139,7 +141,7 @@ export default function Board({ onLogout }) {
               <NoteCard note={note} onEdit={openEdit} onDelete={handleDelete} />
             </div>
           ))}
-        </ResponsiveGridLayout>
+        </GridLayout>
       )}
 
       {modalOpen && (

@@ -54,7 +54,7 @@ export default function NoteModal({ note, onSave, onClose }) {
     e.preventDefault();
     setLoading(true);
     try {
-      await onSave({ title: "", content, color }, note?.id);
+      await onSave({ content, color }, note?.id);
       onClose();
     } catch {
       setLoading(false);
