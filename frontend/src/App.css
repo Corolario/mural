@@ -102,15 +102,16 @@ body {
 }
 
 .filters-sidebar {
-  width: 460px;
+  width: 560px;
   flex-shrink: 0;
-  padding: 1.25rem 1rem;
+  padding: 1rem 0.75rem;
   background: white;
   border-right: 1px solid #e0e0e0;
   position: sticky;
   top: 0;
   max-height: 100vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .notes-area {
@@ -134,9 +135,11 @@ body {
 /* Filters table */
 .filters-title {
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #333;
   margin-bottom: 0.75rem;
-  color: #222;
+  padding: 0 0.5rem;
 }
 
 .filters-title-tag {
@@ -145,17 +148,31 @@ body {
 
 .filters-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 0.9rem;
   background: white;
 }
 
+.filters-table col.col-filtro {
+  width: 60px;
+}
+
+.filters-table col.col-data {
+  width: 130px;
+}
+
+.filters-table col.col-grupo {
+  width: auto;
+}
+
 .filters-table th,
 .filters-table td {
   border: 1px solid #000;
-  padding: 4px 6px;
+  padding: 3px 4px;
   text-align: center;
   vertical-align: middle;
+  overflow: hidden;
 }
 
 .filters-table thead th {
@@ -171,17 +188,20 @@ body {
 .filters-table .filter-code {
   font-weight: 500;
   background: #fafafa;
+  font-size: 0.85rem;
 }
 
 .filters-table input {
   width: 100%;
+  min-width: 0;
   border: none;
   background: transparent;
   font-family: inherit;
-  font-size: 0.85rem;
-  padding: 2px 4px;
+  font-size: 0.8rem;
+  padding: 2px 2px;
   text-align: center;
   color: inherit;
+  box-sizing: border-box;
 }
 
 .filters-table input:focus {
@@ -189,8 +209,9 @@ body {
   background: #f0f2ff;
 }
 
-.filters-table input[type="date"] {
-  min-width: 0;
+.filters-table input[type="date"]::-webkit-calendar-picker-indicator {
+  margin-left: 0;
+  padding: 0;
 }
 
 .board-header h1 {

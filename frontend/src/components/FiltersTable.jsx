@@ -97,21 +97,22 @@ export default function FiltersTable() {
 
   return (
     <div className="filters-panel">
-      <h2 className="filters-title">
+      <h1 className="filters-title">
         Filtros de Pressão <span className="filters-title-tag">( W-8 )</span>
-      </h2>
+      </h1>
       <table className="filters-table">
+        <colgroup>
+          <col className="col-filtro" />
+          <col className="col-data" />
+          <col className="col-grupo" />
+          <col className="col-data" />
+          <col className="col-grupo" />
+        </colgroup>
         <thead>
           <tr>
-            <th rowSpan={2}>FILTRO</th>
+            <th>FILTRO</th>
             <th colSpan={2}>Lavado</th>
             <th colSpan={2}>Operando</th>
-          </tr>
-          <tr>
-            <th>Data</th>
-            <th>Grupo</th>
-            <th>Data</th>
-            <th>Grupo</th>
           </tr>
         </thead>
         <tbody>
