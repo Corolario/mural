@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
-from app.routes import auth, notes
+from app.routes import auth, notes, pressure_filters
 
 
 @asynccontextmanager
@@ -32,6 +32,7 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api")
 app.include_router(notes.router, prefix="/api")
+app.include_router(pressure_filters.router, prefix="/api")
 
 
 @app.get("/api/health")

@@ -5,6 +5,7 @@ import "react-resizable/css/styles.css";
 import api from "../api.js";
 import NoteCard from "./NoteCard.jsx";
 import NoteModal from "./NoteModal.jsx";
+import FiltersTable from "./FiltersTable.jsx";
 
 const GRID_COLS = 64;
 const GRID_WIDTH = 1920;
@@ -106,43 +107,50 @@ export default function Board({ onLogout }) {
 
   return (
     <div className="board">
-      <header className="board-header">
-        <h1>Mural de Recados</h1>
-        <div className="board-header-actions">
-          <button className="btn-add" onClick={openCreate}>
-            + Novo Recado
-          </button>
-          <button className="btn-logout" onClick={onLogout}>
-            Sair
-          </button>
-        </div>
-      </header>
-
-      {notes.length === 0 ? (
-        <div className="empty-board">
-          <p>Nenhum recado ainda. Clique em &quot;+ Novo Recado&quot; para começar!</p>
-        </div>
-      ) : (
-        <GridLayout
-          className="notes-grid"
-          layout={gridLayout}
-          cols={GRID_COLS}
-          rowHeight={ROW_HEIGHT}
-          width={GRID_WIDTH}
-          containerPadding={[16, 16]}
-          onDragStop={handleDragStop}
-          onResizeStop={handleResizeStop}
-          draggableCancel=".note-card-actions"
-          compactType={null}
-          allowOverlap={true}
-        >
-          {notes.map((note) => (
-            <div key={String(note.id)}>
-              <NoteCard note={note} onEdit={openEdit} onDelete={handleDelete} />
+      <div className="board-body">
+        <aside className="filters-sidebar">
+          <FiltersTable />
+        </aside>
+        <div className="notes-area">
+          <header className="board-header">
+            <h1>Mural de Recados</h1>
+            <div className="board-header-actions">
+              <button className="btn-add" onClick={openCreate}>
+                + Novo Recado
+              </button>
+              <button className="btn-logout" onClick={onLogout}>
+                Sair
+              </button>
             </div>
-          ))}
-        </GridLayout>
-      )}
+          </header>
+
+          {notes.length === 0 ? (
+            <div className="empty-board">
+              <p>Nenhum recado ainda. Clique em &quot;+ Novo Recado&quot; para começar!</p>
+            </div>
+          ) : (
+            <GridLayout
+              className="notes-grid"
+              layout={gridLayout}
+              cols={GRID_COLS}
+              rowHeight={ROW_HEIGHT}
+              width={GRID_WIDTH}
+              containerPadding={[16, 16]}
+              onDragStop={handleDragStop}
+              onResizeStop={handleResizeStop}
+              draggableCancel=".note-card-actions"
+              compactType={null}
+              allowOverlap={true}
+            >
+              {notes.map((note) => (
+                <div key={String(note.id)}>
+                  <NoteCard note={note} onEdit={openEdit} onDelete={handleDelete} />
+                </div>
+              ))}
+            </GridLayout>
+          )}
+        </div>
+      </div>
 
       {modalOpen && (
         <NoteModal
