@@ -17,7 +17,7 @@ if not JWT_SECRET or JWT_SECRET == "change-me-in-production":
         "Generate one with: python3 -c \"import secrets; print(secrets.token_hex(32))\""
     )
 JWT_ALGORITHM = "HS256"
-JWT_EXPIRATION_HOURS = int(os.getenv("JWT_EXPIRATION_HOURS", "1"))
+JWT_EXPIRATION_HOURS = int(os.getenv("JWT_EXPIRATION_HOURS", "720"))
 
 security = HTTPBearer()
 

@@ -79,7 +79,7 @@ Cole o valor gerado no `.env`:
 
 ```env
 JWT_SECRET=<cole_a_chave_gerada_aqui>
-JWT_EXPIRATION_HOURS=1
+JWT_EXPIRATION_HOURS=720
 DATABASE_URL=sqlite:///./data/mural.db
 CORS_ORIGINS=http://localhost:3000
 ```
