@@ -102,7 +102,7 @@ body {
 }
 
 .filters-sidebar {
-  width: 500px;
+  width: 440px;
   height: 100vh;
   flex-shrink: 0;
   padding: 1rem 0.75rem;
@@ -162,7 +162,7 @@ body {
 }
 
 .filters-table col.col-data {
-  width: 130px;
+  width: 70px;
 }
 
 .filters-table col.col-grupo {
