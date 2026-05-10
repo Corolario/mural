@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import api from "../api.js";
 
-const NORTE_CODES = ["O-707A", "O-707B", "O-707C", "O-707D", "O-707E", "O-707F"];
-const SUL_CODES = ["O-717A", "O-717B", "O-717C", "O-717D", "O-717E", "O-717F"];
+const NORTE_CODES = ["O-717A", "O-717B", "O-717C", "O-717D", "O-717E", "O-717F"];
+const SUL_CODES = ["O-707A", "O-707B", "O-707C", "O-707D", "O-707E", "O-707F"];
 
 const EMPTY_ROW = {
   lavado_data: null,
