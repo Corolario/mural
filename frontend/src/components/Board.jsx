@@ -113,7 +113,7 @@ export default function Board({ onLogout }) {
         </aside>
         <div className="notes-area">
           <header className="board-header">
-            <h1>Mural de Recados</h1>
+            <h1 className="panel-title">Mural de Recados</h1>
             <div className="board-header-actions">
               <button className="btn-add" onClick={openCreate}>
                 + Novo Recado

@@ -97,8 +97,8 @@ export default function FiltersTable() {
 
   return (
     <div className="filters-panel">
-      <h1 className="filters-title">
-        Filtros de Pressão <span className="filters-title-tag">( W-8 )</span>
+      <h1 className="panel-title">
+        Filtros de Pressão <span className="panel-title-tag">( W-8 )</span>
       </h1>
       <table className="filters-table">
         <colgroup>

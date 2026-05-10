@@ -132,19 +132,20 @@ body {
   z-index: 100;
 }
 
-/* Filters table */
-.filters-title {
+/* Shared panel title */
+.panel-title {
   text-align: center;
   font-size: 1.4rem;
   font-weight: 700;
   color: #333;
   margin-bottom: 0.75rem;
-  padding: 0 0.5rem;
 }
 
-.filters-title-tag {
+.panel-title-tag {
   font-weight: 400;
 }
+
+/* Filters table */
 
 .filters-table {
   width: 100%;
@@ -212,11 +213,6 @@ body {
 .filters-table input[type="date"]::-webkit-calendar-picker-indicator {
   margin-left: 0;
   padding: 0;
-}
-
-.board-header h1 {
-  font-size: 1.4rem;
-  color: #333;
 }
 
 .board-header-actions {
