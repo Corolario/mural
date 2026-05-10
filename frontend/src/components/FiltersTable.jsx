@@ -185,14 +185,6 @@ export default function FiltersTable() {
         </thead>
         <tbody>
           <tr className="filters-section">
-            <th>Norte</th>
-            <th>Data</th>
-            <th>Grupo</th>
-            <th>Data</th>
-            <th>Grupo</th>
-          </tr>
-          {NORTE_CODES.map(renderRow)}
-          <tr className="filters-section">
             <th>Sul</th>
             <th>Data</th>
             <th>Grupo</th>
@@ -200,6 +192,14 @@ export default function FiltersTable() {
             <th>Grupo</th>
           </tr>
           {SUL_CODES.map(renderRow)}
+          <tr className="filters-section">
+            <th>Norte</th>
+            <th>Data</th>
+            <th>Grupo</th>
+            <th>Data</th>
+            <th>Grupo</th>
+          </tr>
+          {NORTE_CODES.map(renderRow)}
         </tbody>
       </table>
     </div>
