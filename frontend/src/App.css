@@ -212,11 +212,6 @@ body {
   background: #f0f2ff;
 }
 
-.filters-table input[type="date"]::-webkit-calendar-picker-indicator {
-  margin-left: 0;
-  padding: 0;
-}
-
 .board-header-actions {
   display: flex;
   gap: 0.75rem;
