@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import api from "../api.js";
 
-const NORTE_CODES = ["O-707A", "O-707B", "O-707C", "O-707D", "O-707E", "O-707F"];
-const SUL_CODES = ["O-717A", "O-717B", "O-717C", "O-717D", "O-717E", "O-717F"];
+const NORTE_CODES = ["O-717A", "O-717B", "O-717C", "O-717D", "O-717E", "O-717F"];
+const SUL_CODES = ["O-707A", "O-707B", "O-707C", "O-707D", "O-707E", "O-707F"];
 
 const EMPTY_ROW = {
   lavado_data: null,
@@ -185,14 +185,6 @@ export default function FiltersTable() {
         </thead>
         <tbody>
           <tr className="filters-section">
-            <th>Norte</th>
-            <th>Data</th>
-            <th>Grupo</th>
-            <th>Data</th>
-            <th>Grupo</th>
-          </tr>
-          {NORTE_CODES.map(renderRow)}
-          <tr className="filters-section">
             <th>Sul</th>
             <th>Data</th>
             <th>Grupo</th>
@@ -200,6 +192,14 @@ export default function FiltersTable() {
             <th>Grupo</th>
           </tr>
           {SUL_CODES.map(renderRow)}
+          <tr className="filters-section">
+            <th>Norte</th>
+            <th>Data</th>
+            <th>Grupo</th>
+            <th>Data</th>
+            <th>Grupo</th>
+          </tr>
+          {NORTE_CODES.map(renderRow)}
         </tbody>
       </table>
     </div>
